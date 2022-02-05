@@ -131,7 +131,15 @@ targets += config_data config_data.gz
 $(obj)/config_data.gz: $(obj)/config_data FORCE
 	$(call if_changed,gzip)
 
-filechk_cat = cat $<
+define extra_data
+CONFIG_THINLTO=y
+CONFIG_LTO_CLANG=y
+CONFIG_CFI_CLANG=y
+endef
+
+export extra_data
+
+filechk_cat = cat $<; echo "$$extra_data"
 
 $(obj)/config_data: $(KCONFIG_CONFIG) FORCE
 	$(call filechk,cat)
