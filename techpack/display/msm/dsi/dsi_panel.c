@@ -550,7 +550,7 @@ static int dsi_panel_power_off(struct dsi_panel *panel)
 exit:
 	return rc;
 }
-static int dsi_panel_tx_cmd_set(struct dsi_panel *panel,
+static int _dsi_panel_tx_cmd_set(struct dsi_panel *panel,
 				enum dsi_cmd_set_type type)
 {
 	int rc = 0, i = 0;
@@ -601,6 +601,10 @@ static int dsi_panel_tx_cmd_set(struct dsi_panel *panel,
 error:
 	return rc;
 }
+
+#define dsi_panel_tx_cmd_set(panel, type) \
+	_dsi_panel_tx_cmd_set(panel, type); \
+	DSI_ERR("dsi_panel_tx_cmd_set: type: " __stringify(type) "\n")
 
 static int dsi_panel_pinctrl_deinit(struct dsi_panel *panel)
 {
@@ -998,6 +1002,9 @@ static int dsi_panel_send_param_cmd(struct dsi_panel *panel,
 	{
 		rc = 0;
 	} else {
+		DSI_ERR("dsi_panel_send_param_cmd: type: %s, value: %u\n",
+			panel_param->param_name, param_info->value);
+
 		param_map = panel->param_cmds[param_info->param_idx].val_map;
 		param_map_state = &param_map[param_info->value];
 
