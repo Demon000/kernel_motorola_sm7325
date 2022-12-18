@@ -34,6 +34,7 @@
 #define INTERLEAVED_RGB_FMT(fmt, a, r, g, b, e0, e1, e2, e3, uc, alpha,   \
 bp, flg, fm, np)                                                          \
 {                                                                         \
+	.name = __stringify(fmt),                                         \
 	.base.pixel_format = DRM_FORMAT_ ## fmt,                          \
 	.fetch_planes = SDE_PLANE_INTERLEAVED,                            \
 	.alpha_enable = alpha,                                            \
@@ -53,6 +54,7 @@ bp, flg, fm, np)                                                          \
 #define INTERLEAVED_RGB_FMT_TILED(fmt, a, r, g, b, e0, e1, e2, e3, uc,    \
 alpha, bp, flg, fm, np, th)                                               \
 {                                                                         \
+	.name = __stringify(fmt),                                         \
 	.base.pixel_format = DRM_FORMAT_ ## fmt,                          \
 	.fetch_planes = SDE_PLANE_INTERLEAVED,                            \
 	.alpha_enable = alpha,                                            \
@@ -73,6 +75,7 @@ alpha, bp, flg, fm, np, th)                                               \
 #define INTERLEAVED_YUV_FMT(fmt, a, r, g, b, e0, e1, e2, e3,              \
 alpha, chroma, count, bp, flg, fm, np)                                    \
 {                                                                         \
+	.name = __stringify(fmt),                                         \
 	.base.pixel_format = DRM_FORMAT_ ## fmt,                          \
 	.fetch_planes = SDE_PLANE_INTERLEAVED,                            \
 	.alpha_enable = alpha,                                            \
@@ -91,6 +94,7 @@ alpha, chroma, count, bp, flg, fm, np)                                    \
 
 #define PSEUDO_YUV_FMT(fmt, a, r, g, b, e0, e1, chroma, flg, fm, np)      \
 {                                                                         \
+	.name = __stringify(fmt),                                         \
 	.base.pixel_format = DRM_FORMAT_ ## fmt,                          \
 	.fetch_planes = SDE_PLANE_PSEUDO_PLANAR,                          \
 	.alpha_enable = false,                                            \
@@ -110,6 +114,7 @@ alpha, chroma, count, bp, flg, fm, np)                                    \
 #define PSEUDO_YUV_FMT_TILED(fmt, a, r, g, b, e0, e1, chroma,             \
 flg, fm, np, th)                                                          \
 {                                                                         \
+	.name = __stringify(fmt),                                         \
 	.base.pixel_format = DRM_FORMAT_ ## fmt,                          \
 	.fetch_planes = SDE_PLANE_PSEUDO_PLANAR,                          \
 	.alpha_enable = false,                                            \
@@ -128,6 +133,7 @@ flg, fm, np, th)                                                          \
 
 #define PSEUDO_YUV_FMT_LOOSE(fmt, a, r, g, b, e0, e1, chroma, flg, fm, np)\
 {                                                                         \
+	.name = __stringify(fmt),                                         \
 	.base.pixel_format = DRM_FORMAT_ ## fmt,                          \
 	.fetch_planes = SDE_PLANE_PSEUDO_PLANAR,                          \
 	.alpha_enable = false,                                            \
@@ -147,6 +153,7 @@ flg, fm, np, th)                                                          \
 #define PSEUDO_YUV_FMT_LOOSE_TILED(fmt, a, r, g, b, e0, e1, chroma,       \
 flg, fm, np, th)                                                          \
 {                                                                         \
+	.name = __stringify(fmt),                                         \
 	.base.pixel_format = DRM_FORMAT_ ## fmt,                          \
 	.fetch_planes = SDE_PLANE_PSEUDO_PLANAR,                          \
 	.alpha_enable = false,                                            \
@@ -167,6 +174,7 @@ flg, fm, np, th)                                                          \
 #define PLANAR_YUV_FMT(fmt, a, r, g, b, e0, e1, e2, alpha, chroma, bp,    \
 flg, fm, np)                                                      \
 {                                                                         \
+	.name = __stringify(fmt),                                         \
 	.base.pixel_format = DRM_FORMAT_ ## fmt,                          \
 	.fetch_planes = SDE_PLANE_PLANAR,                                 \
 	.alpha_enable = alpha,                                            \
