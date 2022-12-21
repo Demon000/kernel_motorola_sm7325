@@ -4518,6 +4518,25 @@ static ssize_t sysfs_hbm_off_delay_write(struct device *dev,
 	return count;
 }
 
+static ssize_t sysfs_hbm_en(struct device *dev,
+	struct device_attribute *attr, const char *buf, size_t count)
+{
+	struct dsi_display *display = dev_get_drvdata(dev);
+	struct dsi_panel *panel = display->panel;
+	bool status;
+	int rc;
+
+	rc = kstrtobool(buf, &status);
+	if (rc)
+		return rc;
+
+	rc = dsi_panel_set_fod_hbm(panel, status);
+	if (rc)
+		return rc;
+
+	return count;
+}
+
 static DEVICE_ATTR(fod_ui, 0444, sysfs_fod_ui_read, NULL);
 static DEVICE_ATTR(force_fod_ui, 0644,
 		   sysfs_force_fod_ui_read,
@@ -4531,8 +4550,10 @@ static DEVICE_ATTR(hbm_on_delay, 0644,
 static DEVICE_ATTR(hbm_off_delay, 0644,
 		   sysfs_hbm_off_delay_read,
 		   sysfs_hbm_off_delay_write);
+static DEVICE_ATTR(hbm_en, 0200, NULL, sysfs_hbm_en);
 
 static struct attribute *panel_attrs[] = {
+	&dev_attr_hbm_en.attr,
 	&dev_attr_hbm_on_delay.attr,
 	&dev_attr_hbm_off_delay.attr,
 	&dev_attr_fod_ui.attr,
