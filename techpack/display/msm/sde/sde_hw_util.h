@@ -178,6 +178,17 @@ int sde_reg_read(struct sde_hw_blk_reg_map *c, u32 reg_off);
 #define SDE_REG_WRITE(c, off, val) sde_reg_write(c, off, val)
 #define SDE_REG_READ(c, off) sde_reg_read(c, off)
 
+#define SDE_REG_WRITE_CHECK(c, off, val) \
+	do { \
+		u32 old_val = SDE_REG_READ(c, off); \
+		if (old_val == (val)) { \
+			SDE_ERROR("W %08x %08x %08x == %08x\n", (c)->base_off, (c)->blk_off, off, val); \
+			break; \
+		} \
+		SDE_ERROR("W %08x %08x %08x %08x\n", (c)->base_off, (c)->blk_off, off, val); \
+		sde_reg_write(c, off, val); \
+	} while (0)
+
 #define MISR_FRAME_COUNT_MASK		0xFF
 #define MISR_CTRL_ENABLE		BIT(8)
 #define MISR_CTRL_STATUS		BIT(9)
