@@ -1307,6 +1307,7 @@ static void _sde_crtc_set_src_split_order(struct drm_crtc *crtc,
 	enum sde_layout prev_layout, cur_layout;
 	struct sde_kms *sde_kms;
 	struct sde_rect left_rect, right_rect;
+	uint32_t prev_flags, cur_flags = 0;
 	int32_t left_pid, right_pid;
 	int32_t stage;
 	int i;
@@ -1328,6 +1329,9 @@ static void _sde_crtc_set_src_split_order(struct drm_crtc *crtc,
 							SDE_LAYOUT_NONE;
 		cur_layout = cur_pstate->sde_pstate->layout;
 
+		prev_flags = cur_flags;
+		cur_flags = cur_pstate->sde_pstate->pipe_order_flags;
+
 		if ((!prv_pstate) || (prv_pstate->stage != cur_pstate->stage)
 				|| (prev_layout != cur_layout)) {
 			/*
@@ -1338,41 +1342,29 @@ static void _sde_crtc_set_src_split_order(struct drm_crtc *crtc,
 				    || (nxt_pstate->stage != cur_pstate->stage)
 				    || (nxt_pstate->sde_pstate->layout !=
 					cur_pstate->sde_pstate->layout))
-				cur_pstate->sde_pstate->pipe_order_flags = 0;
+				if (cur_flags != 0) {
+					cur_pstate->sde_pstate->pipe_order_flags = 0;
+					cur_pstate->sde_pstate->dirty |= SDE_PLANE_DIRTY_SRC_SPLIT_ORDER;
+				}
 
 			continue;
 		}
 
-		stage = cur_pstate->stage;
-
-		left_pid = prv_pstate->sde_pstate->base.plane->base.id;
-		POPULATE_RECT(&left_rect, prv_pstate->drm_pstate->crtc_x,
-			prv_pstate->drm_pstate->crtc_y,
-			prv_pstate->drm_pstate->crtc_w,
-			prv_pstate->drm_pstate->crtc_h, false);
-
-		right_pid = cur_pstate->sde_pstate->base.plane->base.id;
-		POPULATE_RECT(&right_rect, cur_pstate->drm_pstate->crtc_x,
-			cur_pstate->drm_pstate->crtc_y,
-			cur_pstate->drm_pstate->crtc_w,
-			cur_pstate->drm_pstate->crtc_h, false);
-
-		if (right_rect.x < left_rect.x) {
-			swap(left_pid, right_pid);
-			swap(left_rect, right_rect);
-			swap(prv_pstate, cur_pstate);
+		if (cur_pstate->drm_pstate->crtc_x < prv_pstate->drm_pstate->crtc_x) {
+			prv_pstate->sde_pstate->pipe_order_flags = SDE_SSPP_RIGHT;
+			cur_pstate->sde_pstate->pipe_order_flags = 0;
+		} else {
+			prv_pstate->sde_pstate->pipe_order_flags = 0;
+			cur_pstate->sde_pstate->pipe_order_flags = SDE_SSPP_RIGHT;
 		}
 
-		cur_pstate->sde_pstate->pipe_order_flags = SDE_SSPP_RIGHT;
-		prv_pstate->sde_pstate->pipe_order_flags = 0;
-	}
+		prv_pstate->sde_pstate->dirty &= ~SDE_PLANE_DIRTY_SRC_SPLIT_ORDER;
 
-	for (i = 0; i < cnt; i++) {
-		cur_pstate = &pstates[i];
-		sde_plane_setup_src_split_order(
-			cur_pstate->drm_pstate->plane,
-			cur_pstate->sde_pstate->multirect_index,
-			cur_pstate->sde_pstate->pipe_order_flags);
+		if (prev_flags != prv_pstate->sde_pstate->pipe_order_flags)
+			prv_pstate->sde_pstate->dirty |= SDE_PLANE_DIRTY_SRC_SPLIT_ORDER;
+
+		if (cur_flags != cur_pstate->sde_pstate->pipe_order_flags)
+			cur_pstate->sde_pstate->dirty |= SDE_PLANE_DIRTY_SRC_SPLIT_ORDER;
 	}
 }
 
