@@ -3502,6 +3502,8 @@ static int sde_plane_sspp_atomic_update(struct drm_plane *plane,
 	while ((idx = msm_property_pop_dirty(&psde->property_info,
 				&pstate->property_state)) >= 0) {
 		dirty_prop_flag = plane_prop_array[idx];
+		if (dirty_prop_flag)
+			SDE_ERROR_PLANE(psde, "dirty idx: %u\n", idx);
 		pstate->dirty |= dirty_prop_flag;
 	}
 	mutex_unlock(&psde->property_info.property_lock);
