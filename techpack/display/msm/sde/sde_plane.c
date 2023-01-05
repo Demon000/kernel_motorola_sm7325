@@ -4037,6 +4037,14 @@ static void _sde_plane_install_properties(struct drm_plane *plane,
 	vfree(info);
 }
 
+#define cmp_and_set(old, new) \
+	do \
+		if ((old) != (new)) { \
+			(old) = (new); \
+			changed = true; \
+		} \
+	while (0)
+
 static inline void _sde_plane_set_csc_v1(struct sde_plane *psde,
 		void __user *usr_ptr)
 {
