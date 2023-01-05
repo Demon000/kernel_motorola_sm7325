@@ -2992,7 +2992,6 @@ static void _sde_plane_map_prop_to_dirty_bits(void)
 	plane_prop_array[PLANE_PROP_V_DECIMATE] =
 	plane_prop_array[PLANE_PROP_SRC_CONFIG] =
 	plane_prop_array[PLANE_PROP_ZPOS] =
-	plane_prop_array[PLANE_PROP_EXCL_RECT_V1] =
 		SDE_PLANE_DIRTY_RECTS;
 
 	plane_prop_array[PLANE_PROP_CSC_V1] =
@@ -3011,6 +3010,7 @@ static void _sde_plane_map_prop_to_dirty_bits(void)
 	plane_prop_array[PLANE_PROP_INFO] =
 	plane_prop_array[PLANE_PROP_ALPHA] =
 	plane_prop_array[PLANE_PROP_INPUT_FENCE] =
+	plane_prop_array[PLANE_PROP_EXCL_RECT_V1] =
 	plane_prop_array[PLANE_PROP_BLEND_OP] = 0;
 
 	plane_prop_array[PLANE_PROP_FB_TRANSLATION_MODE] =
