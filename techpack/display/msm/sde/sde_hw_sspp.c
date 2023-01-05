@@ -12,9 +12,6 @@
 #include "sde_kms.h"
 #include "sde_hw_reg_dma_v1_color_proc.h"
 
-#undef SDE_REG_WRITE
-#define SDE_REG_WRITE(...) SDE_REG_WRITE_CHECK(__VA_ARGS__)
-
 #define SDE_FETCH_CONFIG_RESET_VALUE   0x00000087
 
 /* SDE_SSPP_SRC */

@@ -83,9 +83,6 @@ u32 *sde_hw_util_get_log_mask_ptr(void)
 	return &sde_hw_util_log_mask;
 }
 
-#undef SDE_REG_WRITE
-#define SDE_REG_WRITE(...) SDE_REG_WRITE_CHECK(__VA_ARGS__)
-
 void sde_init_scaler_blk(struct sde_scaler_blk *blk, u32 version)
 {
 	if (!blk)
